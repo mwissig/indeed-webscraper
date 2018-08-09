@@ -56,7 +56,9 @@ end
 
 get '/' do
 $jobs.each_index do |job|
-  if $jobs[job].salary != "Salary unknown"
+  if $jobs[job].company == "Ruby Tuesday"
+    $text << "<p style='background-color:black; color:gray;'><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
+elsif $jobs[job].salary != "Salary unknown"
 $text << "<p style='background-color:yellow;'><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
   else
 $text << "<p><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
@@ -129,14 +131,19 @@ get '/letter/:id' do
     "CI"=>"",
     "Test Automation"=>"",
     "SDLC."=>"",
-    "Google Suite"=>"",
+    "Google Suite"=>"I have used Google Suite to create email addresses for an organization.",
     "Shell Scripting"=>"",
     "Perl"=>"",
     "Jenkins"=>"",
     "Bootstrap"=>"I have used Bootstrap.",
     "SQLite"=>"",
     "Responsive Web Design"=>"I can use media queries to create responsive design.",
-    "UI"=>""
+    "UI"=>"",
+    "Database Administration"=>"",
+    "Supervising Experience"=>"",
+     "AI"=>"",
+     "Machine Learning"=>""
+
   }
   my_exp = ""
   $jobs[@job].reqs.each do |r|
