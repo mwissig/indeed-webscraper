@@ -1,0 +1,33 @@
+html {
+    margin: 0 auto;
+    background-image: url("images/flower.jpg");
+}
+body {
+  margin: 0 auto;
+  color: black;
+font-family: sans-serif;
+}
+header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 30px;
+  width: 100%;
+  background-color: black;
+  z-index: 11;
+  padding: 2px;
+  overflow: hidden;
+}
+h1 {
+  color: white;
+  font-size: 20px;
+}
+a {
+  text-decoration: none;
+  font-weight: bold;
+}
+.container {
+  margin-top: 50px;
+max-width: 80vw;
+  padding: 20px;
+}

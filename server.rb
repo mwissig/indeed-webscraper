@@ -2,13 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'sinatra'
 require 'unirest'
-#
-# indeed.com
-# get job title, salary, requirements, and company and email
-# make hash
-# def cover letter
-#   text = to email ; hi company, i am intereseted in job title
-# end
+
 
 $jobs = []
 
@@ -38,9 +32,10 @@ def scrape(url)
     if company == nil || company == ""
       company = "your company"
     end
-    reqs = div.css('span.experienceList').text.strip
-    if reqs == nil || reqs == ""
-      reqs = "Javascript and Ruby"
+    reqs = div.css('span.experienceList').text.strip.split(", ")
+    if reqs == []
+      reqs << "Ruby"
+      reqs << "JavaScript"
     end
   salary = div.css('span.no-wrap').text.strip
     if salary == nil || salary == ""
@@ -51,7 +46,6 @@ def scrape(url)
     $jobs << $job
     id += 1
   end
-
 end
 
 scrape('https://www.indeed.com/jobs?q=ruby&l=New+York+City%2C+NY')
@@ -63,19 +57,96 @@ end
 get '/' do
 $jobs.each_index do |job|
   if $jobs[job].salary != "Salary unknown"
-$text << "<p style='background-color:yellow;'><a href='/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
+$text << "<p style='background-color:yellow;'><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
   else
-$text << "<p><a href='/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
+$text << "<p><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
 end
 end
-"#{$text}"
+  erb :home
 end
 
-get '/:id' do
+get '/letter/:id' do
    @id = params[:id]
   @job = $jobs.index { |j| @id == j.id.to_s }
-  $text_i = "<p> To whom it may concern;</p><p> I am intereseted in the position of " + $jobs[@job].title + " at " + $jobs[@job].company + ".<br>I am a full-stack web developer with experience in " + $jobs[@job].reqs + ".<br>This cover letter was generated using Nokogiri and Sinatra.</p><p>Thank you for your consideration,</p><p>Milo Wissig</p>"
-  "#{$text_i}"
+  req = $jobs[@job].reqs.join(", ")
+  @exp = {
+    "JavaScript"=>"I have experience using JavaScript to write programs.",
+    "Ruby"=>"I have experience in Ruby; this cover letter was written in Ruby using Nokogiri and Sinatra by webscraping Indeed.com and matching the skills you have requested values in a hash of pre-written responses.",
+    "CSS"=>"I can use CSS to create transitions and animations and to create mobile responsive pages.",
+    "HTML5"=>"I have 18 years of experience using HTML.",
+    "AJAX"=>"I have experience making API calls using AJAX",
+    "JSON"=>"I have experience using JSON objects.",
+    "Software Development"=>"I write software.",
+    "React"=>"I am in the process of learning React.",
+    "React Native"=>"",
+    "Angular"=>"I am in the process of learning Angular.",
+    "Node.js"=>"I am in the process of learning Node.js.",
+    "Python"=>"I am interested in learning Python.",
+    "Java"=>"I am interested in learning Java.",
+    "Scala"=>"I don\'t know what Scala is.",
+    "Linux"=>"I use Ubuntu.",
+    "Chef"=>"Time to look up what Chef is",
+    "Go"=>"",
+    "Ansible"=>"",
+    "SQL"=>"",
+    "MySQL"=>"",
+    "Redis"=>"",
+    "Puppet"=>"",
+    "PowerShell"=>"",
+    "Selenium"=>"",
+    "XML"=>"",
+    "Windows"=>"I am a regular Windows user.",
+    ".Net"=>"",
+    "C#"=>"",
+    "REST"=>"I have made calls to APIS that use REST",
+    "TCP/IP"=>"",
+    "TCP"=>"",
+    "Heroku"=>"",
+    "Adobe CS"=>"I have 15 years of experience using Adobe Photoshop and Illustrator",
+    "Marketing Automation"=>"",
+    "Splunk"=>"",
+    "iOS"=>"",
+    "iOS Development"=>"",
+    "Sketch"=>"",
+    "Swift"=>"",
+    "PHP"=>"",
+    "Design Experience"=>"I have experience in graphic and web design.",
+    "Design"=>"I have experience in graphic and web design.",
+    "PostgreSQL"=>"",
+    "C/C++"=>"",
+    "Confluence"=>"",
+    "Kubernetes"=>"",
+    "JIRA"=>"",
+    "Kafka"=>"As Gregor Samsa awoke one morning from uneasy dreams he found himself transformed in his bed into a gigantic insect.",
+    "Git"=>"I use Git.",
+    "AWS"=>"I don't know what AWS is.",
+    "OOP"=>"This cover letter was written using object-oriented programming.",
+    "Web Development"=>"I have experience with web development.",
+    "CI/CD"=>"",
+    "Service-Oriented Architecture"=>"",
+    "Backbone.js"=>"",
+    "NoSQL"=>"",
+    "CI"=>"",
+    "Test Automation"=>"",
+    "SDLC."=>"",
+    "Google Suite"=>"",
+    "Shell Scripting"=>"",
+    "Perl"=>"",
+    "Jenkins"=>"",
+    "Bootstrap"=>"I have used Bootstrap.",
+    "SQLite"=>"",
+    "Responsive Web Design"=>"I can use media queries to create responsive design.",
+    "UI"=>""
+  }
+  my_exp = ""
+  $jobs[@job].reqs.each do |r|
+    my_exp << @exp[r]
+    my_exp << " "
+  rescue
+    my_exp << ""
+  end
+  $text_i = "<p> To whom it may concern;</p><p> I am interested in the position of " + $jobs[@job].title + " at " + $jobs[@job].company + ".<br>I am a full-stack web developer looking for a job in the New York City area. " + my_exp + "</p><p>Thank you for your consideration,</p><p>Milo Wissig</p><p style='background-color:red;'>All skills needed: " + req + "</p>"
+  erb :letter
 end
 
 #
