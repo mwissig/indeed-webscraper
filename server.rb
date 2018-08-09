@@ -55,9 +55,26 @@ scrape('https://www.indeed.com/jobs?q=ruby+%24100%2C000&l=New+York+City%2C+NY&st
 end
 
 get '/' do
+    rt = 0
+      rtext = "Goodbye Ruby Tuesday"
 $jobs.each_index do |job|
   if $jobs[job].company == "Ruby Tuesday"
-    $text << "<p style='background-color:black; color:gray;'><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
+    $text << "<p style='background-color:black; color:gray;'><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + rtext + "</p>"
+    case rt
+    when 0
+      rtext = "She would never say where she came from"
+    when 1
+      rtext = "Yesterday don't matter if it's gone"
+    when 2
+      rtext = "While the sun is bright"
+    when 3
+      rtext = "Or in the darkest night"
+    when 4
+      rtext = "No one knows\, she comes and goes"
+    else
+      rtext = "Goodbye Ruby Tuesday"
+    end
+    rt += 1
 elsif $jobs[job].salary != "Salary unknown"
 $text << "<p style='background-color:yellow;'><a href='/letter/" + $jobs[job].id.to_s + "'>" + $jobs[job].id.to_s + "</a>: " + $jobs[job].title + " at " + $jobs[job].company + ", " + $jobs[job].salary + "</p>"
   else
