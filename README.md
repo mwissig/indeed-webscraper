@@ -2,6 +2,8 @@
 
 Webscraper for Indeed.com that generates a cover letter for the first 11 pages of NYC jobs using Ruby based on a list of my skills.
 
+See [on Heroku](http://coverlet.herokuapp.com/)
+
 Work in progress.
 
 Generatesa cover letter for each job.
