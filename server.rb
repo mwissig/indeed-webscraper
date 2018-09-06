@@ -164,10 +164,10 @@ get '/letter/:id' do
   }
   my_exp = ""
   $jobs[@job].reqs.each do |r|
+    if @exp[r] != nil
     my_exp << @exp[r]
     my_exp << " "
-  rescue
-    my_exp << ""
+    end
   end
   $text_i = "<p> To whom it may concern;</p><p> I am interested in the position of " + $jobs[@job].title + " at " + $jobs[@job].company + ".<br>I am a full-stack web developer looking for a job in the New York City area. " + my_exp + "</p><p>Thank you for your consideration,</p><p>Milo Wissig</p><p style='background-color:red;'>All skills needed: " + req + "</p>"
   erb :letter
